@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import Card from "../../Components/Card";
 import Layout from "../../Components/Layout";
 import { getListLibrary } from "../../Services";
-import { LibraryItem } from "../../Interfaces";
+import { Book, LibraryItem } from "../../Interfaces";
 import BookDetail from "../../Components/BookDetail";
 import { useQuery } from "@tanstack/react-query";
+import { FaSpinner } from "react-icons/fa";
+import useReadingListStore from "../../Stores/useReadingListStore";
+
 
 function Home() {
+  const { setReadingList } = useReadingListStore(); 
   const [filterCriteria, setFilterCriteria] = useState<string>("");
   const [filteredItems, setFilteredItems] = useState<LibraryItem[]>([]);
   const [filterValue, setFilterValue] = useState<string>("");
-
   const { data: items = [], isLoading, isError } = useQuery({
     queryKey: ['library'],
     queryFn: getListLibrary,
@@ -20,6 +23,16 @@ function Home() {
     applyFilter();
   }, [filterCriteria, filterValue, items]);
 
+  useEffect(() => {
+    getLocalStorage()
+  }, [])
+  
+  const getLocalStorage = () =>{
+    const itemsStorage: Book[] = JSON.parse(localStorage.getItem('readingList') || '[]');
+    if(itemsStorage?.length){
+      setReadingList(itemsStorage)
+    }
+  }
 
   const applyFilter = () => {
     if (!filterCriteria || !filterValue) {
@@ -51,7 +64,15 @@ function Home() {
     }
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <FaSpinner className="animate-spin text-gray-600" size={30} />
+        <p className="ml-2 text-gray-600">Cargando...</p>
+      </div>
+    );
+  }
+
   if (isError) return <p>Error loading data</p>;
 
   return (

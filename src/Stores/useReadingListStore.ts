@@ -6,6 +6,7 @@ interface ReadingListState {
   readingList: Book[];
   addBook: (book: Book) => void;
   removeBook: (book: Book) => void;
+  setReadingList: (books: Book[]) => void;
 }
 
 const useReadingListStore = create<ReadingListState>(set => ({
@@ -15,6 +16,9 @@ const useReadingListStore = create<ReadingListState>(set => ({
   })),
   removeBook: (book: Book) => set(state => ({
     readingList: state.readingList.filter(b => b.ISBN !== book.ISBN),
+  })),
+  setReadingList: (books: Book[]) => set(() => ({
+    readingList: [...books],
   })),
 }));
 

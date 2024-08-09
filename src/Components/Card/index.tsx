@@ -4,6 +4,7 @@ import { CiBookmarkPlus } from "react-icons/ci";
 import { FaCheck } from "react-icons/fa";
 import useReadingListStore from "../../Stores/useReadingListStore";
 import { ShoppingCartContext } from "../../Context";
+import { Tooltip } from "react-tooltip";
 
 interface CardProps {
   data: Book;
@@ -18,27 +19,46 @@ const Card: React.FC<CardProps> = ({ data }) => {
     context?.openBookDetail();
   };
 
+  const addListReading = () =>{
+    const itemsStorage: Book[] = JSON.parse(localStorage.getItem('readingList') || '[]');
+    const updatedList = [...itemsStorage, data];
+    localStorage.setItem('readingList', JSON.stringify(updatedList));
+    addBook(data)
+  }
+
   const renderIcon = (id: string) => {
     const isInCart = readingList.filter((book) => book.ISBN === id).length > 0;
 
     if (isInCart) {
       return (
-        <div className="bg-white p-2 rounded-full shadow-md cursor-pointer transition-colors duration-300 hover:bg-gray-200">
+        <div
+          id={`tooltip-checked-${id}`}
+          className="bg-white p-2 rounded-full shadow-md cursor-pointer transition-colors duration-300 hover:bg-gray-200"
+        >
           <FaCheck
             className="text-gray-600 hover:text-gray-800"
             size={20}
           ></FaCheck>
+          <Tooltip
+            anchorId={`tooltip-checked-${id}`}
+            content="Agregado a la lista de lectura"
+          />
         </div>
       );
     } else {
       return (
         <div
+          id={`tooltip-checked-${id}`}
           className="bg-white p-2 rounded-full shadow-md cursor-pointer transition-colors duration-300 hover:bg-gray-200"
-          onClick={() => addBook(data)}
+          onClick={() => addListReading()}
         >
           <CiBookmarkPlus
             className="text-gray-600 hover:text-gray-800"
             size={20}
+          />
+          <Tooltip
+            anchorId={`tooltip-checked-${id}`}
+            content="Agregar a la lista de lectura"
           />
         </div>
       );
