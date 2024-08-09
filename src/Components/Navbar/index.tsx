@@ -1,12 +1,7 @@
 import { NavLink } from "react-router-dom";
 import useReadingListStore from "../../Stores/useReadingListStore";
-import { ShoppingCartContext } from "../../Context";
-import { ShoppingCartContextProps } from "../../Interfaces";
-import { useContext } from "react";
 
 const Navbar = () => {
-  const context: ShoppingCartContextProps | undefined =
-    useContext(ShoppingCartContext);
   const { readingList } = useReadingListStore();
   const activeStyle = "underline underline-offset-4";
 

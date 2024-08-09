@@ -5,6 +5,9 @@ import "./App.css";
 import MyLibraries from "../MyLibraries";
 import Navbar from "../../Components/Navbar";
 import { ShoppingCartProvider } from "../../Context";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const AppRoutes = () => {
   let routes = useRoutes([
@@ -18,12 +21,14 @@ const AppRoutes = () => {
 
 const App = () => {
   return (
-    <ShoppingCartProvider>
-      <BrowserRouter>
-        <AppRoutes />
-        <Navbar />
-      </BrowserRouter>
-    </ShoppingCartProvider>
+    <QueryClientProvider client={queryClient}>
+      <ShoppingCartProvider>
+        <BrowserRouter>
+          <AppRoutes />
+          <Navbar />
+        </BrowserRouter>
+      </ShoppingCartProvider>
+    </QueryClientProvider>
   );
 };
 

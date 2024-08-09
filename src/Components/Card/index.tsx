@@ -46,9 +46,9 @@ const Card: React.FC<CardProps> = ({ data }) => {
   };
 
   return (
-    <div className="bg-white cursor-pointer rounded-lg border border-gray-200 shadow-md relative overflow-hidden w-full max-w-[280px]">
+    <div className="bg-white cursor-pointer rounded-lg border border-gray-200 shadow-md relative overflow-hidden w-full max-w-xs sm:max-w-sm lg:max-w-md xl:max-w-lg mx-auto">
       <img
-        className="w-full h-auto object-cover"
+        className="w-full h-48 sm:h-56 md:h-64 lg:h-72 object-cover"
         src={data.cover}
         alt={data.title}
         onClick={() => showBookDetail(data)}

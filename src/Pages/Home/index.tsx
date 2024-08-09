@@ -4,28 +4,22 @@ import Layout from "../../Components/Layout";
 import { getListLibrary } from "../../Services";
 import { LibraryItem } from "../../Interfaces";
 import BookDetail from "../../Components/BookDetail";
+import { useQuery } from "@tanstack/react-query";
 
 function Home() {
-  const [items, setItems] = useState<LibraryItem[]>([]);
   const [filterCriteria, setFilterCriteria] = useState<string>("");
   const [filteredItems, setFilteredItems] = useState<LibraryItem[]>([]);
   const [filterValue, setFilterValue] = useState<string>("");
 
-  useEffect(() => {
-    getLibrary();
-  }, []);
+  const { data: items = [], isLoading, isError } = useQuery({
+    queryKey: ['library'],
+    queryFn: getListLibrary,
+  });
 
   useEffect(() => {
     applyFilter();
   }, [filterCriteria, filterValue, items]);
 
-  const getLibrary = async () => {
-    const list: LibraryItem[] = await getListLibrary(
-      "https://jelou-prueba-tecnica1-frontend.rsbmk.workers.dev/"
-    );
-    setItems(list);
-    setFilteredItems(list);
-  };
 
   const applyFilter = () => {
     if (!filterCriteria || !filterValue) {
@@ -57,6 +51,9 @@ function Home() {
     }
   };
 
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error loading data</p>;
+
   return (
     <Layout>
       <div className="flex items-center justify-center relative w-80 mb-4">
@@ -81,7 +78,7 @@ function Home() {
         </div>
       </div>
 
-      <div className="grid gap-4 grid-cols-4 w-full max-w-screen-lg">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full max-w-screen-lg">
         {filteredItems?.map((item) => (
           <Card key={item.book.ISBN} data={item.book} />
         ))}

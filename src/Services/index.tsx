@@ -1,8 +1,8 @@
 import { DefaultResponse, LibraryItem } from "../Interfaces";
 
-export const getListLibrary = async (url: string): Promise<LibraryItem[]> => {
+export const getListLibrary = async (): Promise<LibraryItem[]> => {
   try {
-    const response = await fetch(url);
+    const response = await fetch('https://jelou-prueba-tecnica1-frontend.rsbmk.workers.dev/');
     const data: DefaultResponse = await response.json();
     return data.default.library;
   } catch (error) {
